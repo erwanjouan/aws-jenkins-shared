@@ -1,4 +1,4 @@
-def call(String projectName, String projectVersion){
+def call(String projectName){
     pipeline{
         agent { label 'aws-cli' }
         environment {
@@ -23,8 +23,7 @@ def call(String projectName, String projectVersion){
                             --stack-name ${projectName} \
                             --parameter-overrides \
                                 ProjectName=${projectName} \
-                                ProjectVersion=${projectVersion} \
-                                ImageTag=${DOCKER_TAG}
+                                ProjectVersion=${PROJECT_VERSION}
                     """
                 }
             }
