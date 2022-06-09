@@ -77,3 +77,11 @@ and push it to DockerHub
 	- Remote File System root : /home/jenkins
 	- (Container Settings)
 		- Mounts: type=bind,source=/Users/erwanjouan/.m2,destination=/root/.m2
+
+## Add new Build project
+
+Create a new "Pipeline Multibranch" item in Jenkins, Jenkinsfile at the root of the project.
+Configure the project to retrieve the project from Github:
+- Credentials : none
+- URL : https with Personal access token
+	- https://<personal_access_token>@github.com/erwanjouan/aws-dev-spring-boot-jar.git
