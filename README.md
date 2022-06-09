@@ -1,23 +1,79 @@
-# aws-jenkins-shared
+# Jenkins
 
-https://www.lambdatest.com/blog/use-jenkins-shared-libraries-in-a-jenkins-pipeline/
+## Source
 
-## deployToAws.groovy
+https://www.youtube.com/watch?v=jaaMNK0Df8U
 
-Job Parameters :
-
-- (String) DOCKER_TAG
-- (String) ECR_REPOSITORY
-- (String) APPLICATION_PORT
-- (Boolean) DESTROY
-
-Pipeline Content:
-
-```groovy
-@Library('aws-jenkins-shared') _
-deployToAws 'aws-deploy-alb-fargate'
+1. run the jenkins master controller
+```
+docker-compose up
 ```
 
-Global library 'aws-jenkins-shared' declared in :
-- Manage Jenkins
-- Global pipeline libraries
+2. create a new user (jenkins:jenkins) and install Docker plugin
+
+3. Manage Jenkins > Configure System > Cloud > Add a new Cloud : Docker > Docker cloud details
+
+run docker-proxy image
+
+```
+make run-docker-proxy
+```
+
+docker run -p 3375:2375 -v /var/run/docker.sock:/var/run/docker.sock -d shipyard/docker-proxy
+ 
+Docker HOST URI
+tcp://docker.for.mac.localhost:3375
+and test it
+
+4. Add Docker Agent templates
+
+Name: docker-agent-1
+Docker Image: jenkins/slave
+
+Registry authentication
+add docker hub user & password
+to allow jenkins master to download jenkins slave
+
+instance capacity: 2
+
+Apply / Save
+
+5. Disable master node executors
+
+Master provides 2 executors by defaut, we need to disable them.
+
+Manage Jenkins / Manage Node / Master / configure / 
+set 0 to # of executors
+
+We do not see build executors anymore
+
+## Add a new Base Image
+
+1. Create a public repo on DockerHub
+
+2. Make a base image from Jenkins slave image. E.g. Dockerfile for maven base image
+
+```Dockerfile
+FROM jenkins/slave
+
+USER root
+
+RUN apt-get update && \
+	apt-get -y install maven
+```
+
+and push it to DockerHub
+
+3. Add the Docker image and maven repo cache
+
+- Build executor status (Etat du lanceur de compilations)
+- Configure Clouds
+- Docker agent templates
+- Add Docker templates
+	- Label : maven
+	- Name : maven
+	- Docker image : rone56/jenkins-maven
+	- Instance capacity : 2
+	- Remote File System root : /home/jenkins
+	- (Container Settings)
+		- Mounts: type=bind,source=/Users/erwanjouan/.m2,destination=/root/.m2
