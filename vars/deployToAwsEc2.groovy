@@ -11,12 +11,12 @@ def call(String infraProjectName, String devProjectName){
                 when { expression { return !params.DESTROY } }
                 steps {
                     git branch: 'main', url: 'https://github.com/erwanjouan/' + infraProjectName + '.git'
-                    GIT_COMMIT_HASH = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
                 }
             }
             stage('Deploy Infrastructure') {
                 when { expression { return !params.DESTROY } }
                 steps {
+                    def GIT_COMMIT_HASH = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
                     sh """
                         aws cloudformation deploy \
                             --capabilities CAPABILITY_NAMED_IAM \
