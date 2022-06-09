@@ -11,6 +11,7 @@ def call(String infraProjectName, String devProjectName){
                 when { expression { return !params.DESTROY } }
                 steps {
                     git branch: 'main', url: 'https://github.com/erwanjouan/' + infraProjectName + '.git'
+                    GIT_COMMIT_HASH = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
                 }
             }
             stage('Deploy Infrastructure') {
@@ -23,7 +24,7 @@ def call(String infraProjectName, String devProjectName){
                             --stack-name ${infraProjectName} \
                             --parameter-overrides \
                                 ProjectName=${infraProjectName} \
-                                ProjectVersion=${PROJECT_VERSION}
+                                ProjectVersion=${GIT_COMMIT_HASH}
                     """
                 }
             }
