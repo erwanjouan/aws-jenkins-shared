@@ -18,8 +18,7 @@ def call(String infraProjectName, String devProjectName){
                 steps {
                     script {
                         def GIT_COMMIT_HASH= sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-                    }
-                    sh """
+                        sh """
                         aws cloudformation deploy \
                             --capabilities CAPABILITY_NAMED_IAM \
                             --template-file ./infra.yaml \
@@ -27,7 +26,8 @@ def call(String infraProjectName, String devProjectName){
                             --parameter-overrides \
                                 ProjectName=${infraProjectName} \
                                 ProjectVersion=${GIT_COMMIT_HASH}
-                    """
+                        """
+                    }
                 }
             }
             stage('Trigger CodeDeploy') {
