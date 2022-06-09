@@ -85,3 +85,10 @@ Configure the project to retrieve the project from Github:
 - Credentials : none
 - URL : https with Personal access token
 	- https://<personal_access_token>@github.com/erwanjouan/aws-dev-spring-boot-jar.git
+## Moving docker-compose 
+
+Moving this file in another folder can make the persistent data to be lost.
+Docker takes the parent folder as project name and expects it to be the same.
+
+https://www.reddit.com/r/docker/comments/uvalnt/how_to_move_dockercompose_files_without_losing/
+
