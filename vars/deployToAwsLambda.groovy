@@ -36,8 +36,7 @@ def call(String infraProjectName, String devProjectName){
                 when { expression { return !params.DESTROY } }
                 steps {
                     sh "aws lambda publish-version --function-name ${devProjectName}"
-                }update
-                
+                }
             }
             stage('Destroy') {
                 when { expression { return params.DESTROY } }
