@@ -17,7 +17,9 @@ def call(String infraProjectName, String devProjectName){
             stage('Deploy Infrastructure') {
                 when { expression { return !params.DESTROY } }
                 steps {
-                    env.GIT_COMMIT_HASH= sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+                    script {
+                        env.GIT_COMMIT_HASH= sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+                    }
                     sh """
                         aws cloudformation deploy \
                             --capabilities CAPABILITY_NAMED_IAM \
