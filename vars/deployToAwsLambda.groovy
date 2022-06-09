@@ -26,6 +26,7 @@ def call(String infraProjectName, String devProjectName){
                                 --parameter-overrides \
                                     ProjectName=${infraProjectName} \
                                     MavenProjectName=${devProjectName} \
+                                    ArtifactOutputBucket=${devProjectName}-output \
                                     GitCommitId=${gitCommitId}
                         """
                     }
