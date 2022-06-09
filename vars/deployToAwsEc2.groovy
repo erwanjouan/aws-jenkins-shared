@@ -1,4 +1,4 @@
-def call(String projectName){
+def call(String infraProjectName, String devProjectName){
     pipeline{
         agent { label 'aws-cli' }
         environment {
@@ -10,7 +10,7 @@ def call(String projectName){
             stage('Checkout Source') {
                 when { expression { return !params.DESTROY } }
                 steps {
-                    git branch: 'main', url: 'https://github.com/erwanjouan/' + projectName + '.git'
+                    git branch: 'main', url: 'https://github.com/erwanjouan/' + infraProjectName + '.git'
                 }
             }
             stage('Deploy Infrastructure') {
@@ -20,17 +20,28 @@ def call(String projectName){
                         aws cloudformation deploy \
                             --capabilities CAPABILITY_NAMED_IAM \
                             --template-file ./infra.yaml \
-                            --stack-name ${projectName} \
+                            --stack-name ${infraProjectName} \
                             --parameter-overrides \
-                                ProjectName=${projectName} \
+                                ProjectName=${infraProjectName} \
                                 ProjectVersion=${PROJECT_VERSION}
+                    """
+                }
+            }
+            stage('Trigger CodeDeploy') {
+                when { expression { return !params.DESTROY } }
+                steps {
+                    sh """
+                        aws deploy create-deployment \
+                            --application-name ${infraProjectName} \
+                            --deployment-group-name ${infraProjectName} \
+                            --s3-location bucket=${devProjectName}-output,key=${devProjectName}/revision.zip,bundleType=zip
                     """
                 }
             }
             stage('Destroy') {
                 when { expression { return params.DESTROY } }
                 steps {
-                    sh "aws cloudformation delete-stack --stack-name ${projectName}"
+                    sh "aws cloudformation delete-stack --stack-name ${infraProjectName}"
                 }
             }
         }
