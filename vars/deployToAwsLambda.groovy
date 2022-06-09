@@ -17,7 +17,7 @@ def call(String infraProjectName, String devProjectName){
                 when { expression { return !params.DESTROY } }
                 steps {
                     script{
-                        def gitCommitId = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+                        def gitCommitId = params.DEV_COMMIT_ID
                         sh """
                             aws cloudformation deploy \
                                 --capabilities CAPABILITY_NAMED_IAM \
