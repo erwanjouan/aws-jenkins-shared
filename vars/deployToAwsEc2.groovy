@@ -5,6 +5,7 @@ def call(String infraProjectName, String devProjectName){
             AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
             AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
             AWS_DEFAULT_REGION='eu-west-1'
+            GIT_COMMIT_HASH = ''        
         }
         stages{
             stage('Checkout Source') {
@@ -16,7 +17,7 @@ def call(String infraProjectName, String devProjectName){
             stage('Deploy Infrastructure') {
                 when { expression { return !params.DESTROY } }
                 steps {
-                    def GIT_COMMIT_HASH = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+                    env.GIT_COMMIT_HASH= sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
                     sh """
                         aws cloudformation deploy \
                             --capabilities CAPABILITY_NAMED_IAM \
