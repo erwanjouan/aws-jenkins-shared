@@ -1,4 +1,4 @@
-def call(String infraProjectName, String devProjectName){
+def call(String infraProjectName){
     pipeline{
         agent { label 'aws-cli' }
         environment {
@@ -23,8 +23,9 @@ def call(String infraProjectName, String devProjectName){
                             --stack-name ${infraProjectName} \
                             --parameter-overrides \
                                 ProjectName=${infraProjectName} \
-                                MavenProjectName=${devProjectName} \
-                                ArtifactOutputBucket=${devProjectName}-output
+                                MavenProjectName=${DEV_PROJECT_NAME} \
+                                ArtifactOutputBucket=${DEV_PROJECT_NAME}-output \
+                                ImageTag=${DOCKER_TAG}
                         """
                 }
             }
