@@ -24,7 +24,6 @@ def call(String projectName){
                             --parameter-overrides \
                                 ProjectName=${projectName} \
                                 MavenProjectName=${DEV_PROJECT_NAME} \
-                                ApplicationPort=${APPLICATION_PORT} \
                                 ImageTag=${DOCKER_TAG}
                     """
                 }
