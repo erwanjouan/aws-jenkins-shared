@@ -92,3 +92,5 @@ Docker takes the parent folder as project name and expects it to be the same.
 
 https://www.reddit.com/r/docker/comments/uvalnt/how_to_move_dockercompose_files_without_losing/
 
+
+### https://github.com/aws/aws-cli/issues/2887

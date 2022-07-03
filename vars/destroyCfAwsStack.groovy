@@ -18,9 +18,6 @@ def call(String infraProjectName){
             stage('Wait for destroy completion') {
                 steps {
                     sh """
-                        //aws cloudformation wait stack-delete-complete \
-                        //    --stack-name ${infraProjectName}
-
                         local stack=${infraProjectName}
                         local lastEvent
                         local lastEventId
