@@ -18,7 +18,7 @@ def call(String infraProjectName){
             stage('Wait for destroy completion') {
                 steps {
                     sh """
-                        local stack=${infraProjectName}
+                        local stack=$infraProjectName
                         local lastEvent
                         local lastEventId
                         local stackStatus=$(aws cloudformation describe-stacks --stack-name $stack | jq -c -r .Stacks[0].StackStatus)
