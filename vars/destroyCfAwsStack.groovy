@@ -40,7 +40,7 @@ def call(String infraProjectName){
                             if [ "$eventId" != "$lastEventId" ]
                             then
                                 lastEventId=$eventId
-                                echo $(echo $lastEvent | jq -r '.Timestamp + "\t-\t" + .ResourceType + "\t-\t" + .LogicalResourceId + "\t-\t" + .ResourceStatus')
+                                echo \$(echo $lastEvent | jq -r '.Timestamp + "\t-\t" + .ResourceType + "\t-\t" + .LogicalResourceId + "\t-\t" + .ResourceStatus')
                             fi
                             sleep 3
                             stackStatus=\$(aws cloudformation describe-stacks --stack-name $stack | jq -c -r .Stacks[0].StackStatus)
