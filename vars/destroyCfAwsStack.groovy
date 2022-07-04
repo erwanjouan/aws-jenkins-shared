@@ -15,38 +15,14 @@ def call(String infraProjectName){
                     """
                 }
             }
-            stage('Wait for destroy completion') {
-                steps {
+            
+            stage('Check deletion') {
+                steps{
+                    writeFile file:'deleteStack.sh', text:libraryResource("sh/deleteStack.sh")
                     sh """
-                        local stack=$infraProjectName
-                        local lastEvent
-                        local lastEventId
-                        local stackStatus=\$(aws cloudformation describe-stacks --stack-name $infraProjectName | jq -c -r .Stacks[0].StackStatus)
-
-                        until \
-                            [ "\$stackStatus" = "CREATE_COMPLETE" ] \
-                            || [ "\$stackStatus" = "CREATE_FAILED" ] \
-                            || [ "\$stackStatus" = "DELETE_COMPLETE" ] \
-                            || [ "\$stackStatus" = "DELETE_FAILED" ] \
-                            || [ "\$stackStatus" = "ROLLBACK_COMPLETE" ] \
-                            || [ "\$stackStatus" = "ROLLBACK_FAILED" ] \
-                            || [ "\$stackStatus" = "UPDATE_COMPLETE" ] \
-                            || [ "\$stackStatus" = "UPDATE_ROLLBACK_COMPLETE" ] \
-                            || [ "\$stackStatus" = "UPDATE_ROLLBACK_FAILED" ]; do
-                            
-                            #[[ \$stackStatus == *""* ]] || [[ \$stackStatus == *"CREATE_FAILED"* ]] || [[ \$stackStatus == *"COMPLETE"* ]]; do
-                            lastEvent=\$(aws cloudformation describe-stack-events --stack \$infraProjectName --query 'StackEvents[].{ EventId: EventId, LogicalResourceId:LogicalResourceId, ResourceType:ResourceType, ResourceStatus:ResourceStatus, Timestamp: Timestamp }' --max-items 1 | jq .[0])
-                            eventId=\$(echo "\$lastEvent" | jq -r .EventId)
-                            if [ "\$eventId" != "\$lastEventId" ]
-                            then
-                                lastEventId=\$eventId
-                                echo \$(echo \$lastEvent | jq -r '.Timestamp + "\t-\t" + .ResourceType + "\t-\t" + .LogicalResourceId + "\t-\t" + .ResourceStatus')
-                            fi
-                            sleep 3
-                            stackStatus=\$(aws cloudformation describe-stacks --stack-name $infraProjectName | jq -c -r .Stacks[0].StackStatus)
-                        done
-
-                        echo "Stack Status: \$stackStatus"
+                        set +x
+                        chmod +x deleteStack.sh
+                        ./deleteStack.sh ${infraProjectName} ${AWS_DEFAULT_REGION}
                     """
                 }
             }
