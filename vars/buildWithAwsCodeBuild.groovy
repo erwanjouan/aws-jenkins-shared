@@ -1,4 +1,4 @@
-def call(String codeBuildProjectName, String gitHubProjectName){
+def call(String gitHubProjectName){
     pipeline {
         agent any
         stages{
@@ -6,8 +6,8 @@ def call(String codeBuildProjectName, String gitHubProjectName){
                 steps {
                     script{
                         awsCodeBuild \
-                            projectName: codeBuildProjectName, \
-                            cacheLocationOverride: "${codeBuildProjectName}-output/cache", \
+                            projectName: 'codebuild-jenkins-slave', \
+                            cacheLocationOverride: "codebuild-jenkins-slave-output/cache", \
                             cacheTypeOverride: 'S3', \
                             region: 'eu-west-1', \
                             credentialsType: 'jenkins', \
