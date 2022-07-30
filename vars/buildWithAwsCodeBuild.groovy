@@ -5,9 +5,10 @@ def call(String gitHubProjectName){
             stage('Build in CodeBuild') {
                 steps {
                     script{
+                        def codebuildBaseProject = 'codebuild-jenkins-slave'
                         awsCodeBuild \
-                            projectName: 'codebuild-jenkins-slave', \
-                            cacheLocationOverride: "codebuild-jenkins-slave-output/cache", \
+                            projectName: codebuildBaseProject, \
+                            cacheLocationOverride: "${codebuildBaseProject}-output/cache", \
                             cacheTypeOverride: 'S3', \
                             region: 'eu-west-1', \
                             credentialsType: 'jenkins', \
