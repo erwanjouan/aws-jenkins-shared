@@ -17,7 +17,7 @@ def call(String gitHubProjectName){
                             sourceControlType: 'project', \
                             sourceLocationOverride: "https://github.com/erwanjouan/${gitHubProjectName}.git", \
                             envVariables: "[{PROJECT_NAME, ${gitHubProjectName}}]"
-                            buildSpecFile: getBuildSpecContent()
+                            buildspecOverride: getBuildSpecContent()
                     }
                 }
             }
