@@ -17,17 +17,9 @@ def call(String gitHubProjectName){
                             sourceControlType: 'project', \
                             sourceLocationOverride: "https://github.com/erwanjouan/${gitHubProjectName}.git", \
                             envVariables: "[{PROJECT_NAME, ${gitHubProjectName}}]"
-                            buildspecOverride: getBuildSpecContent()
                     }
                 }
             }
         }
     }
-}
-
-String getBuildSpecContent(){
-    def path = pwd()
-    def filePath = path + "/buildspec.yml"
-    def buildSpecContent = readFile filePath
-    return buildSpecContent
 }
