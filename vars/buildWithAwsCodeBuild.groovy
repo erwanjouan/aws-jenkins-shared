@@ -6,9 +6,10 @@ def call(String gitHubProjectName){
                 steps {
                     script{
                         def codebuildBaseProject = 'codebuild-jenkins-slave'
+                        def bucketName = "${codebuildBaseProject}-output"
                         awsCodeBuild \
                             projectName: codebuildBaseProject, \
-                            cacheLocationOverride: "${codebuildBaseProject}-output/cache", \
+                            cacheLocationOverride: "${bucketName}/cache", \
                             cacheTypeOverride: 'S3', \
                             region: 'eu-west-1', \
                             credentialsType: 'jenkins', \
@@ -16,7 +17,7 @@ def call(String gitHubProjectName){
                             gitCloneDepthOverride: '1', \
                             sourceControlType: 'project', \
                             sourceLocationOverride: "https://github.com/erwanjouan/${gitHubProjectName}.git", \
-                            envVariables: "[{PROJECT_NAME, ${gitHubProjectName}}]"
+                            envVariables: "[{PROJECT_NAME, ${gitHubProjectName}},{BUCKET_NAME, ${bucketName}}]"
                     }
                 }
             }
