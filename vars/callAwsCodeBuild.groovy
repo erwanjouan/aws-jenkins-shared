@@ -17,7 +17,7 @@ def call(String gitHubProjectName, String deploymentName, String buildSpecFilePa
                             gitCloneDepthOverride: '1', \
                             sourceControlType: 'project', \
                             sourceLocationOverride: "https://github.com/erwanjouan/${gitHubProjectName}.git", \
-                            envVariables: "[{PROJECT_NAME, ${gitHubProjectName}},{BUCKET_NAME, ${bucketName}}]"
+                            envVariables: "[{PROJECT_NAME, ${gitHubProjectName}},{DEPLOYMENT_NAME, ${deploymentName}},{BUCKET_NAME, ${bucketName}}]"
                     }
                 }
             }
