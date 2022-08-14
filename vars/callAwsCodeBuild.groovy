@@ -1,8 +1,8 @@
-def call(String gitHubProjectName){
+def call(String gitHubProjectName, String buildSpecFilePath){
     pipeline {
         agent any
         stages{
-            stage('Build in CodeBuild') {
+            stage('CodeBuild') {
                 steps {
                     script{
                         def codebuildBaseProject = 'codebuild-jenkins-slave'
@@ -11,6 +11,7 @@ def call(String gitHubProjectName){
                             projectName: codebuildBaseProject, \
                             cacheLocationOverride: "${bucketName}/cache", \
                             cacheTypeOverride: 'S3', \
+                            buildSpecFile: buildSpecFilePath, \
                             region: 'eu-west-1', \
                             credentialsType: 'jenkins', \
                             credentialsId: 'codebuild-credentials', \
