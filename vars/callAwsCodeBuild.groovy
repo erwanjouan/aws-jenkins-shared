@@ -10,8 +10,6 @@ def call(String gitHubProjectName, String deploymentName, String buildSpecFilePa
                         def bucketCacheName = "${codebuildBaseProject}-output"
                         awsCodeBuild \
                             projectName: codebuildBaseProject, \
-                            cacheLocationOverride: "${bucketCacheName}/cache", \
-                            cacheTypeOverride: 'S3', \
                             buildSpecFile: "${deploymentName}/${buildSpecFilePath}", \
                             region: 'eu-west-1', \
                             credentialsType: 'jenkins', \
