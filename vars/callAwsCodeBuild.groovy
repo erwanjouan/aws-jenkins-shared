@@ -6,8 +6,7 @@ def call(String gitHubProjectName, String deploymentName, String buildSpecFilePa
                 steps {
                     script{
                         def codebuildBaseProject = 'codebuild-jenkins-slave'
-                        def bucketName = "${gitHubProjectName}-${deploymentName}"
-                        def bucketCacheName = "${codebuildBaseProject}-output"
+                        def projectDeploymentName = "${gitHubProjectName}-${deploymentName}"
                         awsCodeBuild \
                             projectName: codebuildBaseProject, \
                             buildSpecFile: "${deploymentName}/${buildSpecFilePath}", \
@@ -17,7 +16,7 @@ def call(String gitHubProjectName, String deploymentName, String buildSpecFilePa
                             gitCloneDepthOverride: '1', \
                             sourceControlType: 'project', \
                             sourceLocationOverride: "https://github.com/erwanjouan/${gitHubProjectName}.git", \
-                            envVariables: "[{PROJECT_NAME, ${gitHubProjectName}},{DEPLOYMENT_NAME, ${deploymentName}},{BUCKET_NAME, ${bucketName}}]"
+                            envVariables: "[{PROJECT_NAME, ${gitHubProjectName}},{DEPLOYMENT_NAME, ${deploymentName}},{PROJECT_DEPLOYMENT_NAME, ${projectDeploymentName}}]"
                     }
                 }
             }
